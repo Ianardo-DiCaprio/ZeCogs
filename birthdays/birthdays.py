@@ -9,6 +9,7 @@ import contextlib
 from discord.ext import commands
 from .utils import checks
 from .utils.dataIO import dataIO
+from redbot.core.utils.menus import menu, DEFAULT_CONTROLS
 
 
 class Birthdays:
@@ -134,7 +135,8 @@ class Birthdays:
                               for date in g if len(bdays.get(str(date.toordinal()))) > 0)
             if not value.isspace():  # Only contains whitespace when there's no birthdays in that month
                 embed.add_field(name=datetime.datetime(year=1, month=k, day=1).strftime("%B"), value=value)
-        await self.bot.send_message(channel, embed=embed)
+        embeds.append(embed)
+        await menu(ctx, pages=embeds, controls=DEFAULT_CONTROLS, message=None, page=0, timeout=20)
 
     # Utilities
     async def clean_bday(self, user_id):
